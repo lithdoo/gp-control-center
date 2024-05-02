@@ -22,4 +22,14 @@ npm install pnpm -g
 
 pnpm install
 
+sudo apt-get install -y ubuntu-dev-tools rpm libarchive-tools libffi-dev  ruby-full rpm libopenjp2-tools
+
+gem install fpm -v 1.15.1
+
+sudo ln -s /usr/bin/fpm/fpm.ruby2.5 /usr/bin/fpm
+
+export USE_SYSTEM_FPM="true"
+export SNAP_DESTRUCTIVE_MODE="true"
+export LD_LIBRARY_PATH=/usr/local/lib
+
 pnpm run build:linux
