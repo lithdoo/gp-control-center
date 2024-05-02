@@ -4,5 +4,5 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: self-hosted
     steps:
-      - run: pnpm install
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm run build:linux
