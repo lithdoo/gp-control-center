@@ -1,0 +1,8 @@
+name: Build Arm Application
+on: workflow_dispatch
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: self-hosted
+    steps:
+      - run: pnpm install
+      - run: pnpm run build:linux

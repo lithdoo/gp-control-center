@@ -1,5 +1,4 @@
-name: Build Arm Application
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Testing GitHub Actions
 on: workflow_dispatch
 jobs:
   Explore-GitHub-Actions:
