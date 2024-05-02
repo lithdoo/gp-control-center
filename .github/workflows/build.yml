@@ -7,5 +7,5 @@ jobs:
       - run: pnpm install --no-frozen-lockfile
       - run: export USE_SYSTEM_FPM="true"
       - run: export SNAP_DESTRUCTIVE_MODE="true"
-      - run: gem install fpm -v 1.15.1
+      - run: sudo gem install fpm -v 1.15.1
       - run: pnpm run build:linux
