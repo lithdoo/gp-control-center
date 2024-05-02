@@ -8,6 +8,4 @@ jobs:
     runs-on: self-hosted
     steps:
       - run: pnpm install --no-frozen-lockfile
-      - run: export USE_SYSTEM_FPM="true"
-      - run: export SNAP_DESTRUCTIVE_MODE="true"
       - run: pnpm run build:linux
