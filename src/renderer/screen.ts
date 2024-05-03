@@ -1,5 +1,6 @@
 import { AppGridLayout, AppScreen, FocusAction, FocusItem } from "./tools/foucs";
 import { Gamepad, StandardBtnKey } from './tools/gamepad'
+import { KeyBoard, KeyBoardCode } from "./tools/keyboard";
 import { Listener } from "./tools/listener";
 
 export const message = new FocusItem()
@@ -89,21 +90,43 @@ mainScreen.settings(...settings)
 
 export const gamepad = new Gamepad()
 
+export const keyBoard = new KeyBoard()
+
 
 gamepad.onKeyUp = new Listener({
-    [StandardBtnKey.up]: () => {
+    [StandardBtnKey.Up]: () => {
         console.log('key up is down')
         mainScreen[FocusAction.UP]()
     },
-    [StandardBtnKey.down]: () => {
+    [StandardBtnKey.Down]: () => {
         console.log('key down is down')
         mainScreen[FocusAction.DOWN]()
     },
-    [StandardBtnKey.left]: () => {
+    [StandardBtnKey.Left]: () => {
         console.log('left up is down')
         mainScreen[FocusAction.LEFT]()
     },
-    [StandardBtnKey.right]: () => {
+    [StandardBtnKey.Right]: () => {
+        console.log('right up is down')
+        mainScreen[FocusAction.RIGHT]()
+    },
+})
+
+
+keyBoard.onKeyUp = new Listener({
+    [KeyBoardCode.Up]: () => {
+        console.log('key up is down')
+        mainScreen[FocusAction.UP]()
+    },
+    [KeyBoardCode.Down]: () => {
+        console.log('key down is down')
+        mainScreen[FocusAction.DOWN]()
+    },
+    [KeyBoardCode.Left]: () => {
+        console.log('left up is down')
+        mainScreen[FocusAction.LEFT]()
+    },
+    [KeyBoardCode.Right]: () => {
         console.log('right up is down')
         mainScreen[FocusAction.RIGHT]()
     },

@@ -8,27 +8,27 @@ interface BtnState {
 
 
 export enum StandardBtnKey {
-    enter = 0,
-    back = 1,
-    menu = 2,
-    detail = 3,
+    Enter = 0,
+    Back = 1,
+    Menu = 2,
+    Detail = 3,
 
-    option = 8,
-    start = 9,
+    Option = 8,
+    Start = 9,
 
-    up = 12,
-    down = 13,
-    left = 14,
-    right = 15,
+    Up = 12,
+    Down = 13,
+    Left = 14,
+    Right = 15,
 
-    l = 4,
-    r = 5,
+    L = 4,
+    R = 5,
 
-    zl = 6,
-    zr = 7,
+    ZL = 6,
+    ZR = 7,
 
-    pl = 10,
-    pr = 11,
+    PL = 10,
+    PR = 11,
 }
 
 export class Gamepad {
@@ -103,18 +103,18 @@ export class Gamepad {
     onKeyDown: Listener<Partial<{
         [P in StandardBtnKey]: undefined
     }>> = new Listener({
-        [StandardBtnKey.up]: () => { console.log('key up is down') },
-        [StandardBtnKey.down]: () => { console.log('key down is down') },
-        [StandardBtnKey.left]: () => { console.log('left up is down') },
-        [StandardBtnKey.right]: () => { console.log('right up is down') },
+        [StandardBtnKey.Up]: () => { console.log('key up is down') },
+        [StandardBtnKey.Down]: () => { console.log('key down is down') },
+        [StandardBtnKey.Left]: () => { console.log('left up is down') },
+        [StandardBtnKey.Right]: () => { console.log('right up is down') },
     })
     onKeyUp: Listener<Partial<{
         [P in StandardBtnKey]: undefined
     }>> = new Listener({
-        [StandardBtnKey.up]: () => { console.log('key up is up') },
-        [StandardBtnKey.down]: () => { console.log('key down is up') },
-        [StandardBtnKey.left]: () => { console.log('key right is up') },
-        [StandardBtnKey.right]: () => { console.log('key right is up') },
+        [StandardBtnKey.Up]: () => { console.log('key up is up') },
+        [StandardBtnKey.Down]: () => { console.log('key down is up') },
+        [StandardBtnKey.Left]: () => { console.log('key right is up') },
+        [StandardBtnKey.Right]: () => { console.log('key right is up') },
     })
 }
 
