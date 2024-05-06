@@ -2,5 +2,8 @@ node_modules
 dist
 out
 build
+target
 .DS_Store
 *.log*
+client/resources/server
+client/resources/server.exe
