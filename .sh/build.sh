@@ -1,4 +1,4 @@
-#!/user/bin/env bash
+#!/bin/sh
 
 cd $(dirname $0)
 cd ../server/
