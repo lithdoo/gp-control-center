@@ -7,11 +7,11 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: self-hosted
     steps:
-      - name: Build Server
-        working-directory: ./server
-        run: |
-          cargo build --release
-          mv ./target/release/control-center-server ../client/resources/server
+      # - name: Build Server
+      #   working-directory: ./server
+      #   run: |
+      #     cargo build --release
+      #     mv ./target/release/control-center-server ../client/resources/server
       - name: Build Client
         working-directory: ./client
         run: |
