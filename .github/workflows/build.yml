@@ -14,9 +14,9 @@ jobs:
         working-directory: ./server
         run: |
           cargo build --release
-          mv ./target/release/control-center-server ../resources/server
+          mv ./target/release/control-center-server ../client/resources/server
       - name: Build Client
-        # working-directory: ./client
+        working-directory: ./client
         run: |
           pnpm install --no-frozen-lockfile
           npx electron-vite build
