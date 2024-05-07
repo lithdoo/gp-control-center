@@ -5,6 +5,10 @@ declare global {
     electron: ElectronAPI
     api: {
       exit: () => void
+      requestServerLocation: () => void,
+    },
+    on: {
+      serverLocation: (fn: (loc: string) => void) => void
     }
   }
 }

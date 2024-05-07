@@ -5,11 +5,21 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './tools/gamepad'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+
+import { ws } from './ws'
+
+
+ws.start().then((({clientId})=>{
+  ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+    <React.StrictMode>
+      <App clientId={clientId}/>
+    </React.StrictMode>
+  )
+}))
+
+
+
+
 
 
 window.addEventListener("gamepadconnected", (e) => {

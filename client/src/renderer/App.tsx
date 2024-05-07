@@ -36,6 +36,7 @@ import { message, apps, settings } from './screen'
 
 
 const $main_app = block('main_app')
+  .load(element('client_id'))
   .load(element('header'))
   .load(element('header_avator')
     .modifier('active'))
@@ -50,8 +51,11 @@ const $main_app = block('main_app')
   )
   .load(element('footer'))
   .build()
-const App = () => {
+
+
+const App = ({ clientId }: { clientId: string }) => {
   return <div className={$main_app.$}>
+    <div className={$main_app.client_id.$}>{clientId}</div>
     <div className={$main_app.header.$}>
       <div className={$main_app.header_avator.$} ref={node => message.bind(node, $main_app.header_avator.active.$)}></div>
     </div>
@@ -59,7 +63,7 @@ const App = () => {
       <ul className={$main_app.body_app_list.$}>
         {
           apps.map((app) =>
-            <li className={$main_app.body_app_item.$}  ref={node => app.bind(node, $main_app.body_app_item.active.$)}></li>
+            <li className={$main_app.body_app_item.$} ref={node => app.bind(node, $main_app.body_app_item.active.$)}></li>
           )
         }
       </ul>
@@ -83,7 +87,15 @@ style()
   .load([$main_app.$], {
     height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    position: 'relative'
+  })
+  .load([$main_app.client_id.$], {
+    position: "absolute",
+    right: '12px',
+    top: '12px',
+    zIndex:'999',
+    color:'#ccc'
   })
   .load([$main_app.header.$], {
     height: '84px',
@@ -133,7 +145,7 @@ style()
   })
   .load([$main_app.body_app_item.active.$], {
     background: "#66ccff",
-    boxShadow:'0 4px 8px 1px rgba(0,0,0,0.12)'
+    boxShadow: '0 4px 8px 1px rgba(0,0,0,0.12)'
   })
   .load([$main_app.body_app_item.$, ":first-child"], {
     marginLeft: "72px"

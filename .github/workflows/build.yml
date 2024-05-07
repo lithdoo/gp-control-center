@@ -7,5 +7,14 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: self-hosted
     steps:
+      - run: cd ./server/
+      - run: cargo build --release
+      
+      - run: mv ./target/release/control-center-server ../client/resources/server
+      - run: rm -rf ./target
+      
+      - run: cd ../client
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm run build:linux
+      
+      

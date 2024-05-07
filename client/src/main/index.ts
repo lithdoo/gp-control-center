@@ -2,9 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import * as server from './server'
-
-
+import { server } from './server'
 
 
 function createWindow(): void {
@@ -19,11 +17,12 @@ function createWindow(): void {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
-    }
+    },
   })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    mainWindow.webContents.openDevTools()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -47,9 +46,7 @@ app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
-  const serverOrigin =  await server.start()
-
-  console.log('serverOrigin',serverOrigin)
+  const serverLoc = await server.start()
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -60,6 +57,11 @@ app.whenReady().then(async () => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.on('request_server_location', (e) => {
+    console.log('request_server_location',serverLoc)
+    e.sender.send('server_location', serverLoc)
+  })
 
   ipcMain.on('exit', (_, force: boolean) => {
     if (force) {
