@@ -14,14 +14,14 @@ export enum KeyBoardCode {
     Left = 37,
     Right = 39,
 
-    L = 219,
-    R = 221,
+    L1 = 219,
+    R1 = 221,
 
-    ZL = 186,
-    ZR = 222,
+    L2 = 186,
+    R2 = 222,
 
-    PL = 188,
-    PR = 190,
+    L3 = 188,
+    R3 = 190,
 }
 
 

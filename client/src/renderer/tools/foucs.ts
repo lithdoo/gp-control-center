@@ -106,7 +106,10 @@ export abstract class AppScreen {
 
 
 export class AppGridLayout extends AppScreen {
-  protected lines: FocusItem[][] = []
+  protected lines: {
+    recent: null | FocusItem
+    list: FocusItem[],
+  }[] = []
   protected current: null | FocusItem = null
 
   getCurrent(): FocusItem | null {
@@ -114,39 +117,52 @@ export class AppGridLayout extends AppScreen {
   }
 
   setCurrent(item: FocusItem | null): void {
+    if (item) {
+      const line = this.lines.find(v => v.list.find(v => v === item))
+      if (!line) {
+        return
+      } else {
+        line.recent = item
+      }
+    }
     this.current = item
   }
 
   protected resetTarget(target: FocusItem) {
     const up = () => {
-      const lineIdx = this.lines.findIndex((v) => v.find((v) => v === target))
+      const lineIdx = this.lines.findIndex((v) => v.list.find((v) => v === target))
       const line = this.lines
         .filter((_, idx) => idx < lineIdx)
         .reverse()
-        .filter((v) => !!v.length)[0]
-      return (line && line[0]) || null
+        .filter((v) => !!v.list.length)[0]
+
+      return line?.recent || line?.list[0] || null
     }
 
     const down = () => {
-      const lineIdx = this.lines.findIndex((v) => v.find((v) => v === target))
-      const line = this.lines.filter((_, idx) => idx > lineIdx).filter((v) => !!v.length)[0]
-      return (line && line[0]) || null
+      const lineIdx = this.lines.findIndex((v) => v.list.find((v) => v === target))
+      const line = this.lines
+        .filter((_, idx) => idx > lineIdx)
+        .filter((v) => !!v.list.length)[0]
+
+      return line?.recent || line?.list[0] || null
     }
 
     const left = () => {
-      const line = this.lines.find((v) => v.find((v) => v === target))
+      const line = this.lines.find((v) => v.list.find((v) => v === target))
+      
       if (!line) return null
-      const idx = line.findIndex((v) => v === target)
+      const idx = line.list.findIndex((v) => v === target)
       if (idx < 0) return null
-      return line[idx - 1] || null
+      return line.list[idx - 1] || null
     }
 
     const right = () => {
-      const line = this.lines.find((v) => v.find((v) => v === target))
+      const line = this.lines.find((v) => v.list.find((v) => v === target))
       if (!line) return null
-      const idx = line.findIndex((v) => v === target)
+      const idx = line.list.findIndex((v) => v === target)
       if (idx < 0) return null
-      return line[idx + 1] || null
+      return line.list[idx + 1] || null
     }
 
     target[FocusAction.UP] = up
@@ -159,25 +175,23 @@ export class AppGridLayout extends AppScreen {
   }
 
   default(): FocusItem | null {
-    return this.lines[0]?.[0] ?? null
+    return this.lines[0]?.list[0] ?? null
   }
 
   line(...list: FocusItem[]) {
-    this.lines.push(list)
+    this.lines.push({ list, recent: null })
     list.forEach((target) => this.resetTarget(target))
   }
 
   setLine(idx: number, list: FocusItem[]) {
-    this.lines[idx] = list
+    this.lines[idx] = { list, recent: null }
     list.forEach((target) => this.resetTarget(target))
-    console.log(this.lines)
   }
-  getLine(idx:number){
-    return this.lines[idx]??[]
+  getLine(idx: number) {
+    return this.lines[idx] ?? []
   }
 
   has(item) {
-    return !!this.lines.find(line => !!line.find(v => v === item))
+    return !!this.lines.find(line => !!line.list.find(v => v === item))
   }
-
 }

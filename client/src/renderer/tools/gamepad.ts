@@ -21,14 +21,14 @@ export enum StandardBtnKey {
     Left = 14,
     Right = 15,
 
-    L = 4,
-    R = 5,
+    L1 = 4,
+    R1 = 5,
 
-    ZL = 6,
-    ZR = 7,
+    L2 = 6,
+    R2 = 7,
 
-    PL = 10,
-    PR = 11,
+    L3 = 10,
+    R3 = 11,
 }
 
 export class Gamepad {

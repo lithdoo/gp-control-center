@@ -51,13 +51,11 @@ const mainScreen = new class MainScreen extends AppScreen {
         const res = super.focus(item)
 
         const current = this.getCurrent()
-        console.log({current})
 
-        console.log(this.grid.getLine(1).find(v => v === current))
         if (!current) return res
         if (!current.target) return res
         if (!current.target.parentElement) return res
-        if (!this.grid.getLine(1).find(v => v === current)) return res
+        if (!this.grid.getLine(1).list.find(v => v === current)) return res
 
         const element = current.target
         const parent = current.target.parentElement
@@ -68,6 +66,8 @@ const mainScreen = new class MainScreen extends AppScreen {
         const offsetLeft = element.offsetLeft
 
         const scrollLeft = offsetLeft + 0.5 * elementWidth - 0.5 * parentWidth
+
+        console.log('parent',parent)
 
         parent.scrollTo({left:scrollLeft,behavior:'smooth'})
 
