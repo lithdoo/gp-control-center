@@ -1,39 +1,7 @@
-// import Versions from './components/Versions'
-// import electronLogo from './assets/electron.svg'
-import { block, element, style } from './tools/style'
-import { message, apps, settings } from './screen'
-
-// function App(): JSX.Element {
-//   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-
-//   return (
-//     <>
-//       <img alt="logo" className="logo" src={electronLogo} />
-//       <div className="creator">Powered by electron-vite</div>
-//       <div className="text">
-//         Build an Electron app with <span className="react">React</span>
-//         &nbsp;and <span className="ts">TypeScript</span>
-//       </div>
-//       <p className="tip">
-//         Please try pressing <code>F12</code> to open the devTool
-//       </p>
-//       <div className="actions">
-//         <div className="action">
-//           <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-//             Documentation
-//           </a>
-//         </div>
-//         <div className="action">
-//           <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-//             Send IPC
-//           </a>
-//         </div>
-//       </div>
-//       <Versions></Versions>
-//     </>
-//   )
-// }
-
+import { block, element, style } from "../tools/style"
+import { message, apps, settings } from "./state"
+import { FocusItem } from "../tools/foucs"
+import { GpApp } from "./app"
 
 const $main_app = block('main_app')
   .load(element('client_id'))
@@ -52,32 +20,51 @@ const $main_app = block('main_app')
   .load(element('footer'))
   .build()
 
-
-const App = ({ clientId }: { clientId: string }) => {
+export const Launcher = ({ clientId }: { clientId: string }) => {
   return <div className={$main_app.$}>
     <div className={$main_app.client_id.$}>{clientId}</div>
     <div className={$main_app.header.$}>
-      <div className={$main_app.header_avator.$} ref={node => message.bind(node, $main_app.header_avator.active.$)}></div>
+      <Message message={message}></Message>
     </div>
     <div className={$main_app.body.$}>
-      <ul className={$main_app.body_app_list.$}>
-        {
-          apps.map((app) =>
-            <li className={$main_app.body_app_item.$} ref={node => app.bind(node, $main_app.body_app_item.active.$)}></li>
-          )
-        }
-      </ul>
-      <ul className={$main_app.body_setting_list.$}>
-        {
-          settings.map((setting) =>
-            <li className={$main_app.body_setting_item.$} ref={node => setting.bind(node, $main_app.body_setting_item.active.$)}></li>
-          )
-        }
-      </ul>
+      <AppList apps={apps}></AppList>
+      <SettingList settings={settings}></SettingList>
     </div>
     <div className={$main_app.footer.$}></div>
   </div>
 }
+
+const Message = ({ message }: { message: FocusItem }) => {
+  return <div className={$main_app.header_avator.$} ref={node => message.bind(node, $main_app.header_avator.active.$)}></div>
+}
+
+
+const AppList = ({ apps }: { apps: GpApp[] }) => {
+  return <ul className={$main_app.body_app_list.$}>{
+    apps.map((app) =>
+      <li
+        key={app.fid}
+        className={$main_app.body_app_item.$}
+        ref={node => app.bind(node, $main_app.body_app_item.active.$)}>
+      </li>
+    )
+  }</ul>
+}
+
+const SettingList = ({ settings }: { settings: FocusItem[] }) => {
+  return <ul className={$main_app.body_setting_list.$}>{
+    settings.map((setting) =>
+      <li
+        key={setting.fid}
+        className={$main_app.body_setting_item.$}
+        ref={node => setting.bind(node, $main_app.body_setting_item.active.$)}>
+      </li>
+    )
+  }</ul>
+}
+
+
+
 style()
   .load(['', 'body'], {
     height: '100vh',
@@ -94,8 +81,8 @@ style()
     position: "absolute",
     right: '12px',
     top: '12px',
-    zIndex:'999',
-    color:'#ccc'
+    zIndex: '999',
+    color: '#ccc'
   })
   .load([$main_app.header.$], {
     height: '84px',
@@ -177,4 +164,3 @@ style()
     borderTop: '2px solid #ccc'
   })
   .inject()
-export default App

@@ -2,8 +2,8 @@ import './assets/base.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
 import './tools/gamepad'
+import {Launcher} from './launcher/render'
 
 
 import { ws } from './ws'
@@ -12,7 +12,8 @@ import { ws } from './ws'
 ws.start().then((({clientId})=>{
   ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-      <App clientId={clientId}/>
+      {/* <App clientId={clientId}/> */}
+      <Launcher clientId={clientId}></Launcher>
     </React.StrictMode>
   )
 }))

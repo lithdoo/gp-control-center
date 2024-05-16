@@ -11,7 +11,7 @@ export class FocusItem {
   left: () => FocusItem | null = () => null
   right: () => FocusItem | null = () => null
 
-
+  fid:string = Math.random().toString()
   target: HTMLElement | null = null
 
   private className: string = ''
@@ -27,9 +27,6 @@ export class FocusItem {
   blur() {
     this.target?.classList.remove(this.className)
   }
-
-
-
 }
 
 export abstract class AppScreen {
@@ -103,7 +100,6 @@ export abstract class AppScreen {
     }
   }
 }
-
 
 export class AppGridLayout extends AppScreen {
   protected lines: {
