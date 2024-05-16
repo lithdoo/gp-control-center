@@ -18,13 +18,15 @@ export class FocusItem {
 
   bind(target: HTMLElement | null, className: string) {
     this.target = target
-    this.className = className
+    this.className = className 
   }
 
   focus() {
+    if(!this.className) return 
     this.target?.classList.add(this.className)
   }
   blur() {
+    if(!this.className) return 
     this.target?.classList.remove(this.className)
   }
 }

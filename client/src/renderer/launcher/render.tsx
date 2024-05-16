@@ -1,7 +1,8 @@
 import { block, element, style } from "../tools/style"
-import { message, apps, settings } from "./state"
-import { FocusItem } from "../tools/foucs"
+import { message, apps, settings, mainScreen } from "./state"
+import { AppScreen, FocusItem } from "../tools/foucs"
 import { GpApp } from "./app"
+import { useWatch } from "../tools/state"
 
 const $main_app = block('main_app')
   .load(element('client_id'))
@@ -27,7 +28,7 @@ export const Launcher = ({ clientId }: { clientId: string }) => {
       <Message message={message}></Message>
     </div>
     <div className={$main_app.body.$}>
-      <AppList apps={apps}></AppList>
+      <AppList apps={apps} screen={mainScreen}></AppList>
       <SettingList settings={settings}></SettingList>
     </div>
     <div className={$main_app.footer.$}></div>
@@ -39,19 +40,24 @@ const Message = ({ message }: { message: FocusItem }) => {
 }
 
 
-const AppList = ({ apps }: { apps: GpApp[] }) => {
+const AppList = ({ apps, screen }: { apps: GpApp[], screen: AppScreen }) => {
+  const focusId = useWatch(screen, screen => screen.getCurrent()?.fid)
+
   return <ul className={$main_app.body_app_list.$}>{
     apps.map((app) =>
       <li
         key={app.fid}
-        className={$main_app.body_app_item.$}
-        ref={node => app.bind(node, $main_app.body_app_item.active.$)}>
+        className={`${$main_app.body_app_item.$
+          } ${focusId === app.fid ? $main_app.body_app_item.active.$ : ''
+          }`}
+        ref={node => app.bind(node,'')}>
       </li>
     )
   }</ul>
 }
 
 const SettingList = ({ settings }: { settings: FocusItem[] }) => {
+
   return <ul className={$main_app.body_setting_list.$}>{
     settings.map((setting) =>
       <li

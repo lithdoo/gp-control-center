@@ -1,4 +1,4 @@
-import { globalScreen } from "../tools/screen"
+import { global } from "../tools/screen"
 import { AppGridLayout, AppScreen, FocusItem } from "../tools/foucs"
 import { GpApp } from "./app"
 
@@ -83,4 +83,4 @@ mainScreen.toolbar(message, time)
 mainScreen.applications(...apps)
 mainScreen.settings(...settings)
 
-globalScreen.push(mainScreen)
+global.push(mainScreen)
