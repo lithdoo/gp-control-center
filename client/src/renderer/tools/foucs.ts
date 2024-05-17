@@ -3,55 +3,71 @@ export enum FocusAction {
   UP, DOWN, LEFT, RIGHT, ENTER, BACK
 }
 
-export class FocusItem {
-  back: () => FocusItem | null = () => null
-  enter: () => FocusItem | null = () => null
-  up: () => FocusItem | null = () => null
-  down: () => FocusItem | null = () => null
-  left: () => FocusItem | null = () => null
-  right: () => FocusItem | null = () => null
+export interface WithRefKey {
+  $key: string
+}
 
-  fid:string = Math.random().toString()
+export interface Focusable extends WithRefKey {
+  target: HTMLElement | null 
+  back: () => Focusable | null
+  enter: () => Focusable | null
+  up: () => Focusable | null
+  down: () => Focusable | null
+  left: () => Focusable | null
+  right: () => Focusable | null
+
+  onfocus?(): void
+  onblur?(): void
+}
+
+
+
+export class FocusItem  implements Focusable{
+  back: () => Focusable | null = () => null
+  enter: () => Focusable | null = () => null
+  up: () => Focusable | null = () => null
+  down: () => Focusable | null = () => null
+  left: () => Focusable | null = () => null
+  right: () => Focusable | null = () => null
+
+  $key: string = Math.random().toString()
   target: HTMLElement | null = null
 
   private className: string = ''
 
   bind(target: HTMLElement | null, className: string) {
     this.target = target
-    this.className = className 
+    this.className = className
   }
 
-  focus() {
-    if(!this.className) return 
+  onfocus() {
+    if (!this.className) return
     this.target?.classList.add(this.className)
   }
-  blur() {
-    if(!this.className) return 
+  onblur() {
+    if (!this.className) return
     this.target?.classList.remove(this.className)
   }
 }
 
-export abstract class AppScreen {
-  // current: null | FocusItem = null
+export abstract class AppScreen  implements WithRefKey{
+  $key = Math.random().toString()
 
-  abstract getCurrent(): null | FocusItem
-  abstract setCurrent(item: null | FocusItem): void
+  abstract getCurrent(): null | Focusable
+  abstract setCurrent(item: null | Focusable): void
 
-  abstract has(item: FocusItem): boolean
-  abstract default(): FocusItem | null
+  abstract has(item: Focusable): boolean
+  abstract default(): Focusable | null
 
-  focus(item: FocusItem | null) {
+  focus(item: Focusable | null) {
     if (!item) return
     if (this.has(item)) {
-      item.focus()
-      this.getCurrent()?.blur()
+      this.getCurrent()?.onblur?.()
       this.setCurrent(item)
-      this.getCurrent()?.focus()
+      this.getCurrent()?.onfocus?.()
       return true
     } else return false
   }
-
-
 
   [FocusAction.UP]() {
     if (this.getCurrent()) {
@@ -105,16 +121,16 @@ export abstract class AppScreen {
 
 export class AppGridLayout extends AppScreen {
   protected lines: {
-    recent: null | FocusItem
-    list: FocusItem[],
+    recent: null | Focusable
+    list: Focusable[],
   }[] = []
-  protected current: null | FocusItem = null
+  protected current: null | Focusable = null
 
-  getCurrent(): FocusItem | null {
+  getCurrent(): Focusable | null {
     return this.current
   }
 
-  setCurrent(item: FocusItem | null): void {
+  setCurrent(item: Focusable | null): void {
     if (item) {
       const line = this.lines.find(v => v.list.find(v => v === item))
       if (!line) {
@@ -126,7 +142,7 @@ export class AppGridLayout extends AppScreen {
     this.current = item
   }
 
-  protected resetTarget(target: FocusItem) {
+  protected resetTarget(target: Focusable) {
     const up = () => {
       const lineIdx = this.lines.findIndex((v) => v.list.find((v) => v === target))
       const line = this.lines
@@ -148,7 +164,7 @@ export class AppGridLayout extends AppScreen {
 
     const left = () => {
       const line = this.lines.find((v) => v.list.find((v) => v === target))
-      
+
       if (!line) return null
       const idx = line.list.findIndex((v) => v === target)
       if (idx < 0) return null
@@ -172,16 +188,16 @@ export class AppGridLayout extends AppScreen {
     target[FocusAction.RIGHT] = right
   }
 
-  default(): FocusItem | null {
+  default(): Focusable | null {
     return this.lines[0]?.list[0] ?? null
   }
 
-  line(...list: FocusItem[]) {
+  line(...list: Focusable[]) {
     this.lines.push({ list, recent: null })
     list.forEach((target) => this.resetTarget(target))
   }
 
-  setLine(idx: number, list: FocusItem[]) {
+  setLine(idx: number, list: Focusable[]) {
     this.lines[idx] = { list, recent: null }
     list.forEach((target) => this.resetTarget(target))
   }

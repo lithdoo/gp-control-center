@@ -1,5 +1,5 @@
-import { global } from "../tools/screen"
-import { AppGridLayout, AppScreen, FocusItem } from "../tools/foucs"
+import { global } from "@renderer/tools/screen"
+import { AppGridLayout, AppScreen, FocusItem, Focusable } from "@renderer/tools/foucs"
 import { GpApp } from "./app"
 
 export const message = new FocusItem()
@@ -7,7 +7,6 @@ export const time = new FocusItem()
 
 export const apps = new Array(10).fill(null).map(_ => new GpApp())
 export const settings = new Array(5).fill(null).map(_ => new FocusItem())
-
 
 export const mainScreen = new class MainScreen extends AppScreen {
 
@@ -19,34 +18,34 @@ export const mainScreen = new class MainScreen extends AppScreen {
         this.grid.line() // settings line
     }
 
-    getCurrent(): FocusItem | null {
+    getCurrent() {
         return this.grid.getCurrent()
     }
 
-    setCurrent(item: FocusItem | null): void {
+    setCurrent(item: Focusable | null) {
         return this.grid.setCurrent(item)
     }
 
-    has(item: FocusItem): boolean {
+    has(item: Focusable): boolean {
         return this.grid.has(item)
     }
 
-    default(): FocusItem | null {
+    default() {
         return this.grid.default()
     }
 
-    applications(...list: FocusItem[]) {
+    applications(...list: Focusable[]) {
         this.grid.setLine(1, list)
     }
-    settings(...list: FocusItem[]) {
+    settings(...list: Focusable[]) {
         this.grid.setLine(2, list)
     }
-    toolbar(...list: FocusItem[]) {
+    toolbar(...list: Focusable[]) {
         this.grid.setLine(0, list)
     }
 
 
-    focus(item: FocusItem | null): boolean | undefined {
+    focus(item: Focusable | null): boolean | undefined {
         const res = super.focus(item)
 
         const current = this.getCurrent()

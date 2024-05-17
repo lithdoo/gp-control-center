@@ -3,7 +3,7 @@ import './assets/base.css'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './tools/gamepad'
-import {Launcher} from './launcher/render'
+import {Launcher} from './mods/launcher/render'
 
 
 import { ws } from './ws'

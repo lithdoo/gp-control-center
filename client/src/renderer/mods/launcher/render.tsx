@@ -1,8 +1,8 @@
-import { block, element, style } from "../tools/style"
+import { block, element, style } from "@renderer/tools/style"
 import { message, apps, settings, mainScreen } from "./state"
-import { AppScreen, FocusItem } from "../tools/foucs"
+import { AppScreen, FocusItem } from "@renderer/tools/foucs"
+import { useWatch } from "@renderer/tools/state"
 import { GpApp } from "./app"
-import { useWatch } from "../tools/state"
 
 const $main_app = block('main_app')
   .load(element('client_id'))
@@ -41,16 +41,14 @@ const Message = ({ message }: { message: FocusItem }) => {
 
 
 const AppList = ({ apps, screen }: { apps: GpApp[], screen: AppScreen }) => {
-  const focusId = useWatch(screen, screen => screen.getCurrent()?.fid)
+  const focusId = useWatch(screen, screen => screen.getCurrent()?.$key)
 
   return <ul className={$main_app.body_app_list.$}>{
     apps.map((app) =>
       <li
-        key={app.fid}
-        className={`${$main_app.body_app_item.$
-          } ${focusId === app.fid ? $main_app.body_app_item.active.$ : ''
-          }`}
-        ref={node => app.bind(node,'')}>
+        key={app.$key}
+        className={`${$main_app.body_app_item.$} ${focusId === app.$key ? $main_app.body_app_item.active.$ : ''}`}
+        ref={node => app.bind(node, '')}>
       </li>
     )
   }</ul>
@@ -61,7 +59,7 @@ const SettingList = ({ settings }: { settings: FocusItem[] }) => {
   return <ul className={$main_app.body_setting_list.$}>{
     settings.map((setting) =>
       <li
-        key={setting.fid}
+        key={setting.$key}
         className={$main_app.body_setting_item.$}
         ref={node => setting.bind(node, $main_app.body_setting_item.active.$)}>
       </li>
