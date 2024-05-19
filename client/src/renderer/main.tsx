@@ -7,21 +7,17 @@ import {Launcher} from './mods/launcher/render'
 
 
 import { ws } from './ws'
+import { PromptContainer } from './mods/prompt/render'
 
 
 ws.start().then((({clientId})=>{
   ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-      {/* <App clientId={clientId}/> */}
       <Launcher clientId={clientId}></Launcher>
+      <PromptContainer></PromptContainer>
     </React.StrictMode>
   )
 }))
-
-
-
-
-
 
 window.addEventListener("gamepadconnected", (e) => {
   console.log(

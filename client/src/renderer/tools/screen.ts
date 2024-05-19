@@ -19,38 +19,45 @@ export const global = new class {
     [FocusAction.UP]() {
         this.getCurrent()?.[FocusAction.UP]()
         const current = this.getCurrent()
-        if(current) scheduler.add(current)
+        if (current) scheduler.add(current)
 
     }
     [FocusAction.DOWN]() {
         this.getCurrent()?.[FocusAction.DOWN]()
         const current = this.getCurrent()
-        if(current) scheduler.add(current)
+        if (current) scheduler.add(current)
     }
     [FocusAction.LEFT]() {
         this.getCurrent()?.[FocusAction.LEFT]()
         const current = this.getCurrent()
-        if(current) scheduler.add(current)
+        if (current) scheduler.add(current)
     }
     [FocusAction.RIGHT]() {
         this.getCurrent()?.[FocusAction.RIGHT]()
         const current = this.getCurrent()
-        if(current) scheduler.add(current)
+        if (current) scheduler.add(current)
+    }
+    [FocusAction.ENTER]() {
+        this.getCurrent()?.[FocusAction.ENTER]()
+        const current = this.getCurrent()
+        if (current) scheduler.add(current)
     }
 
-    push(screen:AppScreen){
+    push(screen: AppScreen) {
         this.stack.push(screen)
         const current = this.getCurrent()
-        if(current) scheduler.add(current)
+        if (current) scheduler.add(current)
     }
 
-    pop(){
+    pop() {
         this.stack.pop()
         const current = this.getCurrent()
-        if(current) scheduler.add(current)
+        if (current) scheduler.add(current)
     }
 
-    
+    remove(screen: AppScreen) {
+        this.stack = this.stack.filter(v => v !== screen)
+    }
 
 }
 
@@ -97,4 +104,8 @@ keyBoard.onKeyUp = new Listener({
         console.log('right up is down')
         global[FocusAction.RIGHT]()
     },
+    [KeyBoardCode.Enter]:()=>{
+        console.log('enter up is down')
+        global[FocusAction.ENTER]()
+    }
 })

@@ -1,4 +1,5 @@
 
+
 type Callback<T> = { [Property in keyof T]: (e: T[Property]) => void }
 type EventArgu<S extends string, T> = S extends keyof T ? T[S] : any
 

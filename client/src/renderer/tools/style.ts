@@ -81,7 +81,6 @@ class StyleLoader {
     load(selector: [ClsName, Extra] | [ClsName], rules: Partial<CSSStyleDeclaration>) {
         const cls = selector[0] ? `.${selector[0]}` : ''
         const extra = selector[1] || ''
-        console.log(cls + extra)
         this.table.set(cls + extra, rules)
         return this
     }

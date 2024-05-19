@@ -1,8 +1,24 @@
 import { global } from "@renderer/tools/screen"
-import { AppGridLayout, AppScreen, FocusItem, Focusable } from "@renderer/tools/foucs"
+import { AppGridLayout, AppScreen, FocusAction, FocusItem, Focusable } from "@renderer/tools/foucs"
 import { GpApp } from "./app"
+import * as prompt from '@renderer/mods/prompt'
+import { PromptActionBtn } from "../prompt/state"
 
 export const message = new FocusItem()
+message[FocusAction.ENTER] = () => {
+    prompt.global.new({
+        content: 'Are You Sure Delete This File?',
+        detail: 'Confirm Modal designed by Arash Manteghi. Connect with them on Dribbble; the global community for designers and creative professionals.',
+        actions: [
+            new PromptActionBtn('取消', async () => { }),
+            new PromptActionBtn('关机', async () => { }),
+            new PromptActionBtn('重启', async () => { }),
+            new PromptActionBtn('退出桌面', async () => { }),
+        ]
+    })
+
+
+}
 export const time = new FocusItem()
 
 export const apps = new Array(10).fill(null).map(_ => new GpApp())

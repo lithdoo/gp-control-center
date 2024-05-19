@@ -52,8 +52,6 @@ export class UpdateScheduler {
     async track() {
         if (!this.current) return
 
-        console.log(this.current)
-
         const watchers = new Map<DataWatcher<any, unknown>, { state: any, watcher: DataWatcher<any, unknown> }>()
 
         Array.from(this.current.values())
@@ -69,6 +67,7 @@ export class UpdateScheduler {
             Array.from(watchers.values())
                 .forEach(({ state, watcher }) => {
                     const val = watcher.fn(state)
+                    console.log({state,watcher,val})
                     watcher.onUpdate(state, val)
                 })
         } catch (e) {
@@ -90,8 +89,10 @@ export const scheduler = new UpdateScheduler()
 export const useWatch = <State extends {}, Val>(raw: State, getVal: (t: State) => Val) => {
     const [val, setVal] = useState(getVal(raw))
     const binder = useRef(new DataBinder(raw))
-    const watcher = useRef(new DataWatcher<State, Val>(getVal, (_, val) => { setVal(val) }))
-
+    const watcher = useRef(new DataWatcher<State, Val>(getVal, (_, val) => { 
+        console.log('val',val)
+        setVal(val)
+     }))
     useEffect(() => {
         binder.current.add(watcher.current)
         return () => {

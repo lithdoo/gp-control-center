@@ -81,7 +81,6 @@ export class Gamepad {
         this.btnsState = newState
 
         up.forEach((idx) => {
-            console.log(idx)
             this.onKeyUp.emit(idx.toString() as any, undefined)
         })
         down.forEach((idx) => {
