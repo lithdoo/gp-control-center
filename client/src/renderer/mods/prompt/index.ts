@@ -14,14 +14,20 @@ export const global = new class {
         actions?: PromptActionBtn[]
     }) {
         const prompt = new PromptScreen(option)
-        this.list.push(prompt)
+        prompt.close = ()=>{
+            console.log('close')
+            this.remove(prompt)
+            screen.global.remove(prompt)
+        }
+        this.list= this.list.concat([prompt])
         screen.global.push(prompt)
-        scheduler.add(global.list)
+        scheduler.add(global)
     }
 
     remove(prompt: PromptScreen) {
         this.list = this.list.filter(v => v !== prompt)
+        console.log(this)
         screen.global.remove(prompt)
-        scheduler.add(global.list)
+        scheduler.add(global)
     }
 }

@@ -11,7 +11,7 @@ message[FocusAction.ENTER] = () => {
         content: 'Are You Sure Delete This File?',
         detail: 'Confirm Modal designed by Arash Manteghi. Connect with them on Dribbble; the global community for designers and creative professionals.',
         actions: [
-            new PromptActionBtn('取消', async () => { }),
+            new PromptActionBtn('取消', async ({close}) => {close()}),
             new PromptActionBtn('关机', async () => { }, { color: NColor.salmon, icon: 'power' }),
             new PromptActionBtn('重启', async () => { }, { color: NColor.blue, icon: 'refresh' }),
             new PromptActionBtn('退出桌面', async () => { }, { color: NColor.green, icon: 'exit' }),

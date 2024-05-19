@@ -35,9 +35,9 @@ export const UIcon = ({ name }: { name: string }) => {
 }
 
 export const PromptContainer = () => {
-    const list = useWatch(prompt.global.list, (list) => [...list])
+    const list = useWatch(prompt.global, (global) => [...global.list])
     return <div>{
-        list.map(v => <PromptModal screen={v} key={v.$key} />)
+        list.map(v => <PromptModal key={v.$key} screen={v} />)
     }</div>
 }
 
@@ -63,6 +63,7 @@ export const PromptModal = ({ screen }: { screen: PromptScreen }) => {
         </div>
         <ul className={$prompt_modal.action_list.$}>{
             target.actions.map(action => <li
+                key={action.$key}
                 className={[
                     $prompt_modal.action_btn.$,
                     currentId === action.$key

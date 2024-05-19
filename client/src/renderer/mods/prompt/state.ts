@@ -44,6 +44,11 @@ export class PromptScreen extends AppScreen {
                 const item = this.actions.find((_, i, arr) => arr[i - 1] === action)
                 return item ?? null
             }
+
+            action[FocusAction.ENTER] = () => {
+                action.handle({close:()=>this.close()})
+                return null
+            }
         })
     }
 
@@ -75,16 +80,16 @@ export class PromptActionBtn extends FocusItem {
     text: NText
     icon: string
     color: NColor
-    handle: () => Promise<ActionResult>
+    handle: (option: { close: () => void }) => Promise<ActionResult>
     constructor(
-        text: NText, handle: () => Promise<ActionResult>, {
-        icon = 'back', color = NColor.gray
-    } : { icon?: string, color?: NColor } = {}) {
+        text: NText, handle: (option: { close: () => void })=> Promise<ActionResult>, {
+            icon = 'back', color = NColor.gray
+        }: { icon?: string, color?: NColor } = {}) {
         super()
         this.text = text
         this.handle = handle
         this.icon = icon
         this.color = color
     }
-    
+
 }
