@@ -1,17 +1,16 @@
-import { AppScreen, FocusItem, Focusable } from "@renderer/tools/foucs";
-
-export type RenderText = string | { html: string }
+import { NColor, NText } from "@renderer/tools/base";
+import { AppScreen, FocusAction, FocusItem, Focusable } from "@renderer/tools/foucs";
 
 export type ActionResult = void | {
     success: boolean
-    message: RenderText
+    message: NText
 }
 
 export class PromptScreen extends AppScreen {
-    icon?: string
+    icon?: JSX.Element
 
-    content: RenderText = ''
-    detail?: RenderText = ''
+    content: NText = ''
+    detail?: NText = ''
 
     current: null | PromptActionBtn = null
     actions: PromptActionBtn[] = []
@@ -23,25 +22,26 @@ export class PromptScreen extends AppScreen {
 
 
     constructor(option: {
-        icon?: string
-        content: RenderText
-        detail?: RenderText
+        icon?: JSX.Element
+        content: NText
+        detail?: NText
         current?: null | PromptActionBtn
         actions?: PromptActionBtn[]
     }) {
         super()
         Object.assign(this, option)
+        this.initBtnSwtich()
     }
 
-    initBtnSwtich(){
-        this.actions.forEach(action=>{
-            action.left = ()=>{
-                const item = this.actions.find((_,i,arr)=> arr[i-1] === action)
+    initBtnSwtich() {
+        this.actions.forEach(action => {
+            action[FocusAction.LEFT] = () => {
+                const item = this.actions.find((_, i, arr) => arr[i + 1] === action)
                 return item ?? null
             }
 
-            action.right = ()=>{
-                const item = this.actions.find((_,i,arr)=> arr[i+1] === action)
+            action[FocusAction.RIGHT] = () => {
+                const item = this.actions.find((_, i, arr) => arr[i - 1] === action)
                 return item ?? null
             }
         })
@@ -60,6 +60,7 @@ export class PromptScreen extends AppScreen {
     }
 
     setCurrent(item: PromptActionBtn | null): void {
+        console.log('setcurrent', item)
         if (item && !(this.has(item))) {
             return
         }
@@ -71,11 +72,19 @@ export class PromptScreen extends AppScreen {
 }
 
 export class PromptActionBtn extends FocusItem {
-    text: RenderText
+    text: NText
+    icon: string
+    color: NColor
     handle: () => Promise<ActionResult>
-    constructor(text: RenderText, handle: () => Promise<ActionResult>) {
+    constructor(
+        text: NText, handle: () => Promise<ActionResult>, {
+        icon = 'back', color = NColor.gray
+    } : { icon?: string, color?: NColor } = {}) {
         super()
         this.text = text
         this.handle = handle
+        this.icon = icon
+        this.color = color
     }
+    
 }

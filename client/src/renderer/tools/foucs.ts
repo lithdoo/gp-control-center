@@ -11,24 +11,24 @@ export interface Focusable extends WithRefKey {
   target: HTMLElement | null 
   back: () => Focusable | null
   enter: () => Focusable | null
-  up: () => Focusable | null
-  down: () => Focusable | null
-  left: () => Focusable | null
-  right: () => Focusable | null
+  [FocusAction.UP]: () => Focusable | null ;
+  [FocusAction.DOWN]: () => Focusable | null ;
+  [FocusAction.LEFT] : () => Focusable | null ;
+  [FocusAction.RIGHT] : () => Focusable | null ;
+
 
   onfocus?(): void
   onblur?(): void
 }
 
 
-
 export class FocusItem  implements Focusable{
   back: () => Focusable | null = () => null
-  enter: () => Focusable | null = () => null
-  up: () => Focusable | null = () => null
-  down: () => Focusable | null = () => null
-  left: () => Focusable | null = () => null
-  right: () => Focusable | null = () => null
+  enter: () => Focusable | null = () => null;
+  [FocusAction.UP]: () => Focusable | null = () => null;
+  [FocusAction.DOWN]: () => Focusable | null = () => null;
+  [FocusAction.LEFT] : () => Focusable | null = () => null;
+  [FocusAction.RIGHT] : () => Focusable | null = () => null;
 
   $key: string = Math.random().toString()
   target: HTMLElement | null = null

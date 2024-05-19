@@ -3,6 +3,7 @@ import { AppGridLayout, AppScreen, FocusAction, FocusItem, Focusable } from "@re
 import { GpApp } from "./app"
 import * as prompt from '@renderer/mods/prompt'
 import { PromptActionBtn } from "../prompt/state"
+import { NColor } from "@renderer/tools/base"
 
 export const message = new FocusItem()
 message[FocusAction.ENTER] = () => {
@@ -11,9 +12,9 @@ message[FocusAction.ENTER] = () => {
         detail: 'Confirm Modal designed by Arash Manteghi. Connect with them on Dribbble; the global community for designers and creative professionals.',
         actions: [
             new PromptActionBtn('取消', async () => { }),
-            new PromptActionBtn('关机', async () => { }),
-            new PromptActionBtn('重启', async () => { }),
-            new PromptActionBtn('退出桌面', async () => { }),
+            new PromptActionBtn('关机', async () => { }, { color: NColor.salmon, icon: 'power' }),
+            new PromptActionBtn('重启', async () => { }, { color: NColor.blue, icon: 'refresh' }),
+            new PromptActionBtn('退出桌面', async () => { }, { color: NColor.green, icon: 'exit' }),
         ]
     })
 

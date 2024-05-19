@@ -85,6 +85,18 @@ class StyleLoader {
         return this
     }
 
+    loads(selectors: ([ClsName, Extra] | [ClsName])[], rules: Partial<CSSStyleDeclaration>) {
+        const text = selectors.map(selector=>{
+            const cls = selector[0] ? `.${selector[0]}` : ''
+            const extra = selector[1] || ''
+            return cls + extra
+        }).join(' ')
+
+ 
+        this.table.set(text, rules)
+        return this
+    }
+
     inject() {
         const str = Array.from(this.table.entries())
             .map(([selector, ruls]) => {

@@ -1,14 +1,15 @@
 import { scheduler } from "@renderer/tools/state"
-import { PromptActionBtn, PromptScreen, RenderText } from "./state"
+import { PromptActionBtn, PromptScreen } from "./state"
 import * as screen from '@renderer/tools/screen'
+import { NText } from "@renderer/tools/base"
 
 export const global = new class {
     list: PromptScreen[] = []
 
     new(option: {
-        icon?: string
-        content: RenderText
-        detail?: RenderText
+        icon?: JSX.Element
+        content: NText
+        detail?: NText
         current?: null | PromptActionBtn
         actions?: PromptActionBtn[]
     }) {
