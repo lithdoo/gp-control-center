@@ -78,6 +78,9 @@ type Extra = string
 class StyleLoader {
     table: Map<string, Partial<CSSStyleDeclaration>> = new Map
 
+    propertyTable: Map<string, string> = new Map()
+    keyframesTable: Map<string, string> = new Map()
+
     load(selector: [ClsName, Extra] | [ClsName], rules: Partial<CSSStyleDeclaration>) {
         const cls = selector[0] ? `.${selector[0]}` : ''
         const extra = selector[1] || ''
@@ -86,25 +89,52 @@ class StyleLoader {
     }
 
     loads(selectors: ([ClsName, Extra] | [ClsName])[], rules: Partial<CSSStyleDeclaration>) {
-        const text = selectors.map(selector=>{
+        const text = selectors.map(selector => {
             const cls = selector[0] ? `.${selector[0]}` : ''
             const extra = selector[1] || ''
             return cls + extra
         }).join(' ')
 
- 
+
         this.table.set(text, rules)
         return this
     }
 
     inject() {
-        const str = Array.from(this.table.entries())
+        const rules = Array.from(this.table.entries())
             .map(([selector, ruls]) => {
                 return `${selector}{ ${Object.entries(ruls).map(([str, val]) => `\r\n${str.replace(/([A-Z])/g, '-$1').toLocaleLowerCase()}:${val}`).join(';')}\r\n}`
             })
             .join('\r\n')
             + '\r\n'
-        insertCss(str)
+
+        const keyframes = Array.from(this.keyframesTable.entries())
+            .map(([name, val]) => {
+                return `@keyframes ${name}{${val}}`
+            })
+            .join('\r\n')
+            + '\r\n'
+
+        const property = Array.from(this.propertyTable.entries())
+            .map(([name, val]) => {
+                return `@property ${name}{${val}}`
+            })
+            .join('\r\n')
+            + '\r\n'
+
+        insertCss(rules)
+        insertCss(keyframes)
+        insertCss(property)
+    }
+
+    property(name: string, val: string) {
+        this.propertyTable.set(name, val)
+        return this
+    }
+
+    keyframes(name: string, val: string) {
+        this.keyframesTable.set(name, val)
+        return this
     }
 }
 

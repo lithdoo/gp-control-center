@@ -3,6 +3,7 @@ import { PromptScreen } from "./state"
 import { useWatch } from "@renderer/tools/state"
 import * as prompt from './index'
 import { NText } from "@renderer/tools/base"
+import { useEffect, useRef, useState } from "react"
 
 
 const $prompt_modal = block('prompt_modal')
@@ -37,16 +38,16 @@ export const UIcon = ({ name }: { name: string }) => {
 export const PromptContainer = () => {
     const list = useWatch(prompt.global, (global) => [...global.list])
     return <div>{
-        list.map(v => <PromptModal key={v.$key} screen={v} />)
+        list.map((v, i, arr) => <PromptModal key={v.$key} screen={v} active={i === arr.length - 1} />)
     }</div>
 }
 
-export const PromptModal = ({ screen }: { screen: PromptScreen }) => {
+export const PromptModal = ({ screen, active }: { screen: PromptScreen, active: boolean }) => {
     const target = useWatch(screen, (screen) => ({ ...screen }))
     const currentId = useWatch(screen, (screen) => (screen.getCurrent()?.$key))
     return <div className={[
         $prompt_modal.$,
-        target.hidden ? $prompt_modal._.hidden.$ : ''
+        active ? '' : $prompt_modal._.hidden.$
     ].join(' ')}>
         <div className={$prompt_modal.bg.$}></div>
         <div className={$prompt_modal.icon.$}>
@@ -70,11 +71,11 @@ export const PromptModal = ({ screen }: { screen: PromptScreen }) => {
                         ? $prompt_modal.action_btn.current.$
                         : ''
                 ].join(' ')}
-                ref={ref=>{
-                    if(!ref) return 
-                    ref.style.setProperty('--action-btn-color',action.color.current())
-                    ref.style.setProperty('--action-btn-shadow',action.color.shadow())
-                    ref.style.setProperty('--action-btn-color-text',action.color.text())
+                ref={ref => {
+                    if (!ref) return
+                    ref.style.setProperty('--action-btn-color', action.color.current())
+                    ref.style.setProperty('--action-btn-shadow', action.color.shadow())
+                    ref.style.setProperty('--action-btn-color-text', action.color.text())
                 }}
             >
                 <div className={$prompt_modal.action_btn_icon.$}><UIcon name={action.icon}></UIcon></div>
@@ -96,7 +97,11 @@ style()
         alignItems: 'center',
         justifyContent: 'center',
         color: '#333',
-        paddingBottom: '56px'
+        paddingBottom: '56px',
+        transition: 'all 0.3s ease'
+    })
+    .load([$prompt_modal._.hidden.$], {
+        opacity: '0',
     })
     .load([$prompt_modal.bg.$], {
         height: '100%',
@@ -121,6 +126,7 @@ style()
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        padding:'0'
     })
     .load([$prompt_modal.action_btn.$], {
         height: '36px',
@@ -134,7 +140,7 @@ style()
         flexDirection: 'row',
 
         transition: 'all 0.2s ease',
-        
+
         borderLeftWidth: '2px',
         paddingLeft: '32px',
         paddingRight: '24px',
@@ -152,7 +158,7 @@ style()
     .load([$prompt_modal.action_btn.current.$], {
         boxShadow: 'var(--action-btn-shadow)',
         border: '2px solid var(--action-btn-color)',
-        
+
         borderLeftWidth: '32px',
         paddingLeft: '2px',
         paddingRight: '16px',
@@ -162,11 +168,63 @@ style()
         [$prompt_modal.action_btn_icon.$]
     ], {
         margin: '0 22px 0 -26px',
-        color:'var(--action-btn-color-text)'
+        color: 'var(--action-btn-color-text)'
     })
     .loads([
         [$prompt_modal.action_btn.current.$],
         [$prompt_modal.action_btn_text.$]
     ], {
     })
+    .inject()
+
+const $prompt_wait_icon = block('prompt_wait_icon')
+    // .load(element('icon'))
+    // .load(element('number'))
+    .build()
+export const PromptWaitIcon = ({ sec, onFinish }: { sec: number, onFinish: () => void }) => {
+
+    const [now, setNow] = useState(sec)
+    const nowRef = useRef(sec)
+    const timeRef = useRef<any>()
+
+    useEffect(() => {
+
+        const loop = () => {
+            console.log(now)
+            if (nowRef.current <= 0) {
+                onFinish()
+                return
+            }
+            timeRef.current = setTimeout(() => {
+                nowRef.current = nowRef.current - 1
+                setNow(nowRef.current)
+                loop()
+            }, 1000)
+        }
+
+        loop()
+
+        return () => {
+            clearTimeout(timeRef.current)
+        }
+    })
+
+    return <div className={$prompt_wait_icon.$} >
+        {/* <div className="prompt_wait_icon"></div> */}
+        {now}
+    </div>
+}
+
+style()
+    .load([$prompt_wait_icon.$], {
+        height: '60px',
+        lineHeight: '60px',
+        textAlign: 'center',
+        fontSize: '48px',
+        fontWeight: '600'
+    })
+    .load([$prompt_wait_icon.$, '::after'], {
+        content: 'var(--prompt-wait-sec)',
+    } as any)
+
     .inject()

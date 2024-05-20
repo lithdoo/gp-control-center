@@ -22,6 +22,8 @@ export const global = new class {
         this.list= this.list.concat([prompt])
         screen.global.push(prompt)
         scheduler.add(global)
+
+        return prompt
     }
 
     remove(prompt: PromptScreen) {

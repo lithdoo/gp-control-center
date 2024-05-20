@@ -4,15 +4,44 @@ import { GpApp } from "./app"
 import * as prompt from '@renderer/mods/prompt'
 import { PromptActionBtn } from "../prompt/state"
 import { NColor } from "@renderer/tools/base"
+import { PromptWaitIcon } from "../prompt/render"
+
+
+const openWaitPrompt = (
+    option: { content: string, sec: number },
+    then: () => void,
+    cancel: () => void) => {
+
+
+    const target = prompt.global.new({
+        content: option.content,
+        icon: <PromptWaitIcon sec={option.sec} onFinish={then} />,
+        detail: '',
+        actions: [new PromptActionBtn('取消', async () => {
+            target.close()
+            cancel()
+        }),]
+    })
+
+}
+
 
 export const message = new FocusItem()
 message[FocusAction.ENTER] = () => {
-    prompt.global.new({
-        content: 'Are You Sure Delete This File?',
-        detail: 'Confirm Modal designed by Arash Manteghi. Connect with them on Dribbble; the global community for designers and creative professionals.',
+    const target = prompt.global.new({
+        content: '电源选项',
+        detail: '',
         actions: [
-            new PromptActionBtn('取消', async ({close}) => {close()}),
-            new PromptActionBtn('关机', async () => { }, { color: NColor.salmon, icon: 'power' }),
+            new PromptActionBtn('取消', async () => { target.close() }),
+            new PromptActionBtn('关机', async () => {
+
+                openWaitPrompt(
+                    { content: '关机', sec: 5 },
+                    () => { alert('关机') },
+                    () => { target.close() }
+                )
+
+            }, { color: NColor.salmon, icon: 'power' }),
             new PromptActionBtn('重启', async () => { }, { color: NColor.blue, icon: 'refresh' }),
             new PromptActionBtn('退出桌面', async () => { }, { color: NColor.green, icon: 'exit' }),
         ]
