@@ -34,7 +34,6 @@ message[FocusAction.ENTER] = () => {
         actions: [
             new PromptActionBtn('取消', async () => { target.close() }),
             new PromptActionBtn('关机', async () => {
-
                 openWaitPrompt(
                     { content: '关机', sec: 5 },
                     () => { alert('关机') },
@@ -42,8 +41,20 @@ message[FocusAction.ENTER] = () => {
                 )
 
             }, { color: NColor.salmon, icon: 'power' }),
-            new PromptActionBtn('重启', async () => { }, { color: NColor.blue, icon: 'refresh' }),
-            new PromptActionBtn('退出桌面', async () => { }, { color: NColor.green, icon: 'exit' }),
+            new PromptActionBtn('重启', async () => {
+                openWaitPrompt(
+                    { content: '重启', sec: 5 },
+                    () => { alert('重启') },
+                    () => { target.close() }
+                )
+            }, { color: NColor.blue, icon: 'refresh' }),
+            new PromptActionBtn('退出桌面', async () => {
+                openWaitPrompt(
+                    { content: '重启', sec: 5 },
+                    () => { window.api.exit() },
+                    () => { target.close() }
+                )
+            }, { color: NColor.green, icon: 'exit' }),
         ]
     })
 
