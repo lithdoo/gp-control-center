@@ -11,7 +11,7 @@ export const apps = new Array(10).fill(null).map(_ => new FocusItem())
 export const settings = new Array(5).fill(null).map(_ => new FocusItem())
 
 
-export const global = new class {
+export const screen = new class {
     stack: AppScreen[] = [];
 
     getCurrent() { return this.stack[this.stack.length - 1] ?? null }
@@ -70,19 +70,19 @@ export const keyBoard = new KeyBoard()
 gamepad.onKeyUp = new Listener({
     [StandardBtnKey.Up]: () => {
         console.log('key up is down')
-        global[FocusAction.UP]()
+        screen[FocusAction.UP]()
     },
     [StandardBtnKey.Down]: () => {
         console.log('key down is down')
-        global[FocusAction.DOWN]()
+        screen[FocusAction.DOWN]()
     },
     [StandardBtnKey.Left]: () => {
         console.log('left up is down')
-        global[FocusAction.LEFT]()
+        screen[FocusAction.LEFT]()
     },
     [StandardBtnKey.Right]: () => {
         console.log('right up is down')
-        global[FocusAction.RIGHT]()
+        screen[FocusAction.RIGHT]()
     },
 })
 
@@ -90,22 +90,22 @@ gamepad.onKeyUp = new Listener({
 keyBoard.onKeyUp = new Listener({
     [KeyBoardCode.Up]: () => {
         console.log('key up is down')
-        global[FocusAction.UP]()
+        screen[FocusAction.UP]()
     },
     [KeyBoardCode.Down]: () => {
         console.log('key down is down')
-        global[FocusAction.DOWN]()
+        screen[FocusAction.DOWN]()
     },
     [KeyBoardCode.Left]: () => {
         console.log('left up is down')
-        global[FocusAction.LEFT]()
+        screen[FocusAction.LEFT]()
     },
     [KeyBoardCode.Right]: () => {
         console.log('right up is down')
-        global[FocusAction.RIGHT]()
+        screen[FocusAction.RIGHT]()
     },
     [KeyBoardCode.Enter]:()=>{
         console.log('enter up is down')
-        global[FocusAction.ENTER]()
+        screen[FocusAction.ENTER]()
     }
 })

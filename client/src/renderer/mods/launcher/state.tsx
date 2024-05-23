@@ -1,7 +1,7 @@
-import { global } from "@renderer/tools/screen"
+import { screen } from "@renderer/tools/screen"
 import { AppGridLayout, AppScreen, FocusAction, FocusItem, Focusable } from "@renderer/tools/foucs"
 import { GpApp } from "./app"
-import * as prompt from '@renderer/mods/prompt'
+import {prompt} from '@renderer/mods/prompt'
 import { PromptActionBtn } from "../prompt/state"
 import { NColor } from "@renderer/tools/base"
 import { PromptWaitIcon } from "../prompt/render"
@@ -13,7 +13,7 @@ const openWaitPrompt = (
     cancel: () => void) => {
 
 
-    const target = prompt.global.new({
+    const target = prompt.new({
         content: option.content,
         icon: <PromptWaitIcon sec={option.sec} onFinish={then} />,
         detail: '',
@@ -28,7 +28,8 @@ const openWaitPrompt = (
 
 export const message = new FocusItem()
 message[FocusAction.ENTER] = () => {
-    const target = prompt.global.new({
+
+    const target = prompt.new({
         content: '电源选项',
         detail: '',
         actions: [
@@ -139,4 +140,4 @@ mainScreen.toolbar(message, time)
 mainScreen.applications(...apps)
 mainScreen.settings(...settings)
 
-global.push(mainScreen)
+screen.push(mainScreen)

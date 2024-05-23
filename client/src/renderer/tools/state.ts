@@ -34,6 +34,22 @@ export class DataWatcher<State, Val>{
 }
 
 
+function loggedMethod<This, Args extends any[], Return>(
+    target: (this: This, ...args: Args) => Return,
+    context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+) {
+    const methodName = String(context.name);
+
+    function replacementMethod(this: This, ...args: Args): Return {
+        console.log(`LOG: Entering method '${methodName}'.`)
+        const result = target.call(this, ...args);
+        console.log(`LOG: Exiting method '${methodName}'.`)
+        return result;
+    }
+
+    return replacementMethod;
+}
+
 export class UpdateScheduler {
     static global = new UpdateScheduler()
     static timeout = () => new Promise((res) => requestAnimationFrame(res))
@@ -81,7 +97,32 @@ export class UpdateScheduler {
         if (this.current) this.current.add(new DataBinder(state))
         else this.current = new Set([new DataBinder(state)])
     }
+
+    
+    afterCallSync(){
+        return function loggedMethod<This, Args extends any[], Return>(
+            target: (this: This, ...args: Args) => Return,
+            context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
+        ) {
+            const methodName = String(context.name);
+        
+            function replacementMethod(this: This, ...args: Args): Return {
+                console.log(`LOG: Entering method '${methodName}'.`)
+                const result = target.call(this, ...args);
+                console.log(`LOG: Exiting method '${methodName}'.`)
+                return result;
+            }
+        
+            return replacementMethod;
+        }
+    }
+
+    afterCallAsync(){
+
+    }
 }
+
+
 
 
 export const scheduler = new UpdateScheduler()
