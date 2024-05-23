@@ -21,8 +21,10 @@
     "build:linux": "electron-vite build && electron-builder --linux"
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.24.1",
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
+    "@swc/core": "^1.5.7",
     "@types/insert-css": "^2.0.3",
     "insert-css": "^2.0.0"
   },

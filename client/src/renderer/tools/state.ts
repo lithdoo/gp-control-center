@@ -23,7 +23,7 @@ export class DataBinder<State extends Object> {
 }
 
 
-export class DataWatcher<State, Val>{
+export class DataWatcher<State, Val> {
     fn: (state: State) => Val
     onUpdate: (state: State, val: Val) => void
 
@@ -34,7 +34,7 @@ export class DataWatcher<State, Val>{
 }
 
 
-function loggedMethod<This, Args extends any[], Return>(
+export function loggedMethod<This, Args extends any[], Return>(
     target: (this: This, ...args: Args) => Return,
     context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
 ) {
@@ -83,7 +83,7 @@ export class UpdateScheduler {
             Array.from(watchers.values())
                 .forEach(({ state, watcher }) => {
                     const val = watcher.fn(state)
-                    console.log({state,watcher,val})
+                    console.log({ state, watcher, val })
                     watcher.onUpdate(state, val)
                 })
         } catch (e) {
@@ -93,33 +93,33 @@ export class UpdateScheduler {
         }
     }
 
-    add(state: Object) {
-        if (this.current) this.current.add(new DataBinder(state))
-        else this.current = new Set([new DataBinder(state)])
-    }
-
-    
-    afterCallSync(){
-        return function loggedMethod<This, Args extends any[], Return>(
-            target: (this: This, ...args: Args) => Return,
-            context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>
-        ) {
-            const methodName = String(context.name);
-        
-            function replacementMethod(this: This, ...args: Args): Return {
-                console.log(`LOG: Entering method '${methodName}'.`)
-                const result = target.call(this, ...args);
-                console.log(`LOG: Exiting method '${methodName}'.`)
-                return result;
-            }
-        
-            return replacementMethod;
+    add(state: Object | null) {
+        if (state && typeof state === 'object') {
+            if (this.current) this.current.add(new DataBinder(state))
+            else this.current = new Set([new DataBinder(state)])
         }
     }
 
-    afterCallAsync(){
-
+    push(...list: Object[]) {
+        list.forEach(obj => this.add(obj))
     }
+
+
+    callSync<That>(val: (t: That) => Object[]) {
+        const that = this
+        return function <Args extends any[], Return>(
+            target: (this: That, ...args: Args) => Return,
+            _context: ClassMethodDecoratorContext<That, (this: That, ...args: Args) => Return>
+        ) {
+            return function (this: That, ...args: Args): Return {
+                that.push(...val(this))
+                return target.call(this, ...args);
+            }
+        }
+    }
+
+    // todo 异步更新视图
+    callAsync() {}
 }
 
 
@@ -130,10 +130,10 @@ export const scheduler = new UpdateScheduler()
 export const useWatch = <State extends {}, Val>(raw: State, getVal: (t: State) => Val) => {
     const [val, setVal] = useState(getVal(raw))
     const binder = useRef(new DataBinder(raw))
-    const watcher = useRef(new DataWatcher<State, Val>(getVal, (_, val) => { 
-        console.log('val',val)
+    const watcher = useRef(new DataWatcher<State, Val>(getVal, (_, val) => {
+        console.log('val', val)
         setVal(val)
-     }))
+    }))
     useEffect(() => {
         binder.current.add(watcher.current)
         return () => {

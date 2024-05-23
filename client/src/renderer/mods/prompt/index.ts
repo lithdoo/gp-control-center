@@ -1,4 +1,4 @@
-import { scheduler } from "@renderer/tools/state"
+import { scheduler,loggedMethod } from "@renderer/tools/state"
 import { PromptActionBtn, PromptScreen } from "./state"
 import { screen } from '@renderer/tools/screen'
 import { NText } from "@renderer/tools/base"
@@ -10,7 +10,9 @@ import { NText } from "@renderer/tools/base"
 export const prompt = new class {
     list: PromptScreen[] = []
 
-    @scheduler.afterCallSync()
+    @scheduler.callSync((that)=>[
+        that,that.list
+    ])
     new(option: {
         icon?: JSX.Element
         content: NText
@@ -19,7 +21,6 @@ export const prompt = new class {
         actions?: PromptActionBtn[]
     }) {
         const prompt = new PromptScreen(option)
-        console.log(this)
         prompt.close = () => {
             console.log('close')
             this.remove(prompt)
@@ -27,19 +28,14 @@ export const prompt = new class {
         }
         this.list = this.list.concat([prompt])
         screen.push(prompt)
-        scheduler.add(prompt)
-        scheduler.add(this)
-        scheduler.add(this.list)
-
         return prompt
     }
-
+    
+    @scheduler.callSync((that)=>[
+        that,that.list
+    ])
     remove(prompt: PromptScreen) {
         this.list = this.list.filter(v => v !== prompt)
-        console.log(this)
         screen.remove(prompt)
-        scheduler.add(prompt)
-        scheduler.add(this)
-        scheduler.add(this.list)
     }
 }

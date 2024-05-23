@@ -11,55 +11,72 @@ export const apps = new Array(10).fill(null).map(_ => new FocusItem())
 export const settings = new Array(5).fill(null).map(_ => new FocusItem())
 
 
-export const screen = new class {
+
+export const screen = new class GlobalScreen {
     stack: AppScreen[] = [];
 
     getCurrent() { return this.stack[this.stack.length - 1] ?? null }
 
+    @scheduler.callSync<GlobalScreen>((t)=>[
+        t.getCurrent()
+    ])
     [FocusAction.UP]() {
         this.getCurrent()?.[FocusAction.UP]()
-        const current = this.getCurrent()
-        if (current) scheduler.add(current)
 
     }
+
+    @scheduler.callSync<GlobalScreen>((t)=>[
+        t.getCurrent()
+    ])
     [FocusAction.DOWN]() {
         this.getCurrent()?.[FocusAction.DOWN]()
         const current = this.getCurrent()
         if (current) scheduler.add(current)
     }
+
+    @scheduler.callSync<GlobalScreen>((t)=>[
+        t.getCurrent()
+    ])
     [FocusAction.LEFT]() {
         this.getCurrent()?.[FocusAction.LEFT]()
-        const current = this.getCurrent()
-        if (current) scheduler.add(current)
     }
+
+    @scheduler.callSync<GlobalScreen>((t)=>[
+        t.getCurrent()
+    ])
     [FocusAction.RIGHT]() {
         this.getCurrent()?.[FocusAction.RIGHT]()
-        const current = this.getCurrent()
-        if (current) scheduler.add(current)
     }
+    @scheduler.callSync<GlobalScreen>((t)=>[
+        t.getCurrent()
+    ])
     [FocusAction.ENTER]() {
         this.getCurrent()?.[FocusAction.ENTER]()
-        const current = this.getCurrent()
-        if (current) scheduler.add(current)
     }
 
+    @scheduler.callSync<GlobalScreen>((t)=>[
+        t.getCurrent()
+    ])
     push(screen: AppScreen) {
         this.stack.push(screen)
-        const current = this.getCurrent()
-        if (current) scheduler.add(current)
     }
 
+    @scheduler.callSync<GlobalScreen>((t)=>[
+        t.getCurrent()
+    ])
     pop() {
         this.stack.pop()
-        const current = this.getCurrent()
-        if (current) scheduler.add(current)
     }
 
+    @scheduler.callSync<GlobalScreen>((t)=>[
+        t.getCurrent()
+    ])
     remove(screen: AppScreen) {
         this.stack = this.stack.filter(v => v !== screen)
     }
 
 }
+
 
 
 export const gamepad = new Gamepad()
