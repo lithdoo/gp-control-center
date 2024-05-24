@@ -35,7 +35,7 @@ export const UIcon = ({ name }: { name: string }) => {
     </svg>
 }
 
-export const PromptContainer = () => {
+export const PromptView = () => {
     const list = useWatch(prompt.prompt, (global) => [...global.list])
     return <div>{
         list.map((v, i, arr) => <PromptModal key={v.$key} screen={v} active={i === arr.length - 1} />)

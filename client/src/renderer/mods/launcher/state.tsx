@@ -5,6 +5,7 @@ import {prompt} from '@renderer/mods/prompt'
 import { PromptActionBtn } from "../prompt/state"
 import { NColor } from "@renderer/tools/base"
 import { PromptWaitIcon } from "../prompt/render"
+import { TestApp, app } from "../app"
 
 
 const openWaitPrompt = (
@@ -28,38 +29,36 @@ const openWaitPrompt = (
 
 export const message = new FocusItem()
 message[FocusAction.ENTER] = () => {
+    app.start(TestApp.keyName,null)
+    // const target = prompt.new({
+    //     content: '电源选项',
+    //     detail: '',
+    //     actions: [
+    //         new PromptActionBtn('取消', async () => { target.close() }),
+    //         new PromptActionBtn('关机', async () => {
+    //             openWaitPrompt(
+    //                 { content: '关机', sec: 5 },
+    //                 () => { alert('关机') },
+    //                 () => { target.close() }
+    //             )
 
-    const target = prompt.new({
-        content: '电源选项',
-        detail: '',
-        actions: [
-            new PromptActionBtn('取消', async () => { target.close() }),
-            new PromptActionBtn('关机', async () => {
-                openWaitPrompt(
-                    { content: '关机', sec: 5 },
-                    () => { alert('关机') },
-                    () => { target.close() }
-                )
-
-            }, { color: NColor.salmon, icon: 'power' }),
-            new PromptActionBtn('重启', async () => {
-                openWaitPrompt(
-                    { content: '重启', sec: 5 },
-                    () => { alert('重启') },
-                    () => { target.close() }
-                )
-            }, { color: NColor.blue, icon: 'refresh' }),
-            new PromptActionBtn('退出桌面', async () => {
-                openWaitPrompt(
-                    { content: '重启', sec: 5 },
-                    () => { window.api.exit() },
-                    () => { target.close() }
-                )
-            }, { color: NColor.green, icon: 'exit' }),
-        ]
-    })
-
-
+    //         }, { color: NColor.salmon, icon: 'power' }),
+    //         new PromptActionBtn('重启', async () => {
+    //             openWaitPrompt(
+    //                 { content: '重启', sec: 5 },
+    //                 () => { alert('重启') },
+    //                 () => { target.close() }
+    //             )
+    //         }, { color: NColor.blue, icon: 'refresh' }),
+    //         new PromptActionBtn('退出桌面', async () => {
+    //             openWaitPrompt(
+    //                 { content: '重启', sec: 5 },
+    //                 () => { window.api.exit() },
+    //                 () => { target.close() }
+    //             )
+    //         }, { color: NColor.green, icon: 'exit' }),
+    //     ]
+    // })
 }
 export const time = new FocusItem()
 

@@ -122,9 +122,6 @@ export class UpdateScheduler {
     callAsync() {}
 }
 
-
-
-
 export const scheduler = new UpdateScheduler()
 
 export const useWatch = <State extends {}, Val>(raw: State, getVal: (t: State) => Val) => {

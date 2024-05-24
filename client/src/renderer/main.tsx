@@ -7,14 +7,16 @@ import {Launcher} from './mods/launcher/render'
 
 
 import { ws } from './ws'
-import { PromptContainer } from './mods/prompt/render'
+import { PromptView } from './mods/prompt/render'
+import { AppView } from './mods/app/render'
 
 
 ws.start().then((({clientId})=>{
   ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
       <Launcher clientId={clientId}></Launcher>
-      <PromptContainer></PromptContainer>
+      <PromptView></PromptView>
+      <AppView></AppView>
     </React.StrictMode>
   )
 }))

@@ -1,5 +1,6 @@
 import { AppScreen } from "@renderer/tools/foucs"
 import { screen } from '@renderer/tools/screen'
+import { scheduler } from "@renderer/tools/state"
 
 
 
@@ -14,6 +15,7 @@ class Application {
         this.table.set(app.keyName, app)
     }
 
+    @scheduler.callSync((t) => [t])
     async start(keyName: string, argu: unknown) {
         const old = this.processing.find(v => v.appKeyName === keyName)
         const app = this.table.get(keyName)
@@ -68,3 +70,38 @@ interface AppProcess {
     update(argu: unknown): AppProcess
     destroy(): Promise<void>
 }
+
+export class TestApp implements AppProcess {
+    static keyName = 'test-app'
+
+    appKeyName = TestApp.keyName
+    processId: string
+    view: JSX.Element
+    screen: AppScreen
+
+    constructor() {
+        this.processId = ''
+        this.view = <div>test</div>
+        this.screen = new TestAppScreen()
+    }
+
+    update(argu: unknown): AppProcess {
+        return this
+    }
+    async destroy() { }
+}
+
+class TestAppScreen extends AppScreen {
+
+    getCurrent() { return null }
+    setCurrent() { }
+
+    has() { return false }
+    default() { return null }
+}
+
+
+app.regist({
+    keyName: TestApp.keyName,
+    start: () => new TestApp()
+})
