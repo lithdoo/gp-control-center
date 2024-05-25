@@ -1,11 +1,7 @@
-import { scheduler,loggedMethod } from "@renderer/tools/state"
+import { scheduler } from "@renderer/tools/state"
 import { PromptActionBtn, PromptScreen } from "./state"
 import { screen } from '@renderer/tools/screen'
-import { NText } from "@renderer/tools/base"
-
-
-
-
+import { NxText } from "@renderer/tools/base"
 
 export const prompt = new class {
     list: PromptScreen[] = []
@@ -15,8 +11,8 @@ export const prompt = new class {
     ])
     new(option: {
         icon?: JSX.Element
-        content: NText
-        detail?: NText
+        content: NxText
+        detail?: NxText
         current?: null | PromptActionBtn
         actions?: PromptActionBtn[]
     }) {

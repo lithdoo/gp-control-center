@@ -20,7 +20,6 @@ class BlockBuilder<S extends { [key: string]: { [key: string]: NoVar } } = {}> {
     }
 
     load<SS extends string, TT extends { [key: string]: NoVar }>(element: ElementBuilder<SS, TT>) {
-
         const elements = {
             ...this.elements,
             [element.name]: [
@@ -30,6 +29,7 @@ class BlockBuilder<S extends { [key: string]: { [key: string]: NoVar } } = {}> {
         }
         return new BlockBuilder<S & { [key in SS]: TT }>(this.blockName, elements)
     }
+
 
     build() {
         const $ = {
@@ -81,7 +81,7 @@ class StyleLoader {
     propertyTable: Map<string, string> = new Map()
     keyframesTable: Map<string, string> = new Map()
 
-    load(selector: [ClsName, Extra] | [ClsName], rules: Partial<CSSStyleDeclaration>) {
+    load(selector: [ClsName, Extra] | [ClsName] , rules: Partial<CSSStyleDeclaration>) {
         const cls = selector[0] ? `.${selector[0]}` : ''
         const extra = selector[1] || ''
         this.table.set(cls + extra, rules)

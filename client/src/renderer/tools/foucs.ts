@@ -1,6 +1,12 @@
 
 export enum FocusAction {
-  UP, DOWN, LEFT, RIGHT, ENTER, BACK
+  UP = 'up',
+  DOWN = 'down',
+  LEFT = 'left',
+  RIGHT = 'right',
+  ENTER = 'enter',
+  BACK = 'back',
+  START = 'start'
 }
 
 export interface WithRefKey {
@@ -8,13 +14,15 @@ export interface WithRefKey {
 }
 
 export interface Focusable extends WithRefKey {
-  target: HTMLElement | null 
-  back: () => Focusable | null
-  enter: () => Focusable | null
-  [FocusAction.UP]: () => Focusable | null ;
-  [FocusAction.DOWN]: () => Focusable | null ;
-  [FocusAction.LEFT] : () => Focusable | null ;
-  [FocusAction.RIGHT] : () => Focusable | null ;
+  target: HTMLElement | null
+
+  [FocusAction.BACK]: () => Focusable | null
+  [FocusAction.ENTER]: () => Focusable | null
+  [FocusAction.START]: () => Focusable | null
+  [FocusAction.UP]: () => Focusable | null;
+  [FocusAction.DOWN]: () => Focusable | null;
+  [FocusAction.LEFT]: () => Focusable | null;
+  [FocusAction.RIGHT]: () => Focusable | null;
 
 
   onfocus?(): void
@@ -22,13 +30,15 @@ export interface Focusable extends WithRefKey {
 }
 
 
-export class FocusItem  implements Focusable{
-  back: () => Focusable | null = () => null
-  enter: () => Focusable | null = () => null;
+export class FocusItem implements Focusable {
   [FocusAction.UP]: () => Focusable | null = () => null;
   [FocusAction.DOWN]: () => Focusable | null = () => null;
-  [FocusAction.LEFT] : () => Focusable | null = () => null;
-  [FocusAction.RIGHT] : () => Focusable | null = () => null;
+  [FocusAction.LEFT]: () => Focusable | null = () => null;
+  [FocusAction.RIGHT]: () => Focusable | null = () => null;
+
+  [FocusAction.BACK]: () => Focusable | null = () => null;
+  [FocusAction.ENTER]: () => Focusable | null = () => null;
+  [FocusAction.START]: () => Focusable | null = () => null;
 
   $key: string = Math.random().toString()
   target: HTMLElement | null = null
@@ -50,7 +60,7 @@ export class FocusItem  implements Focusable{
   }
 }
 
-export abstract class AppScreen  implements WithRefKey{
+export abstract class AppScreen implements WithRefKey {
   $key = Math.random().toString()
 
   abstract getCurrent(): null | Focusable
@@ -112,6 +122,15 @@ export abstract class AppScreen  implements WithRefKey{
   [FocusAction.BACK]() {
     if (this.getCurrent()) {
       const current = this.getCurrent()?.[FocusAction.BACK]()
+      if (current) this.focus(current)
+    } else {
+      this.focus(this.default())
+    }
+  }
+
+  [FocusAction.START]() {
+    if (this.getCurrent()) {
+      const current = this.getCurrent()?.[FocusAction.START]()
       if (current) this.focus(current)
     } else {
       this.focus(this.default())

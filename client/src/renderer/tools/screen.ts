@@ -17,7 +17,7 @@ export const screen = new class GlobalScreen {
 
     getCurrent() { return this.stack[this.stack.length - 1] ?? null }
 
-    @scheduler.callSync<GlobalScreen>((t)=>[
+    @scheduler.callSync<GlobalScreen>((t) => [
         t.getCurrent()
     ])
     [FocusAction.UP]() {
@@ -25,7 +25,7 @@ export const screen = new class GlobalScreen {
 
     }
 
-    @scheduler.callSync<GlobalScreen>((t)=>[
+    @scheduler.callSync<GlobalScreen>((t) => [
         t.getCurrent()
     ])
     [FocusAction.DOWN]() {
@@ -34,41 +34,50 @@ export const screen = new class GlobalScreen {
         if (current) scheduler.add(current)
     }
 
-    @scheduler.callSync<GlobalScreen>((t)=>[
+    @scheduler.callSync<GlobalScreen>((t) => [
         t.getCurrent()
     ])
     [FocusAction.LEFT]() {
         this.getCurrent()?.[FocusAction.LEFT]()
     }
 
-    @scheduler.callSync<GlobalScreen>((t)=>[
+    @scheduler.callSync<GlobalScreen>((t) => [
         t.getCurrent()
     ])
     [FocusAction.RIGHT]() {
         this.getCurrent()?.[FocusAction.RIGHT]()
     }
-    @scheduler.callSync<GlobalScreen>((t)=>[
+    @scheduler.callSync<GlobalScreen>((t) => [
         t.getCurrent()
     ])
     [FocusAction.ENTER]() {
         this.getCurrent()?.[FocusAction.ENTER]()
     }
+ 
+    @scheduler.callSync<GlobalScreen>((t) => [
+        t.getCurrent()
+    ])
+    [FocusAction.START]() {
+        console.log('start', this.getCurrent())
+        this.getCurrent()?.[FocusAction.START]()
+    }
 
-    @scheduler.callSync<GlobalScreen>((t)=>[
+
+    @scheduler.callSync<GlobalScreen>((t) => [
         t.getCurrent()
     ])
     push(screen: AppScreen) {
-        this.stack.push(screen)
+        this.stack = this.stack.filter(v => v !== screen).concat([screen])
     }
 
-    @scheduler.callSync<GlobalScreen>((t)=>[
+    @scheduler.callSync<GlobalScreen>((t) => [
         t.getCurrent()
     ])
     pop() {
         this.stack.pop()
     }
 
-    @scheduler.callSync<GlobalScreen>((t)=>[
+    @scheduler.callSync<GlobalScreen>((t) => [
         t.getCurrent()
     ])
     remove(screen: AppScreen) {
@@ -121,8 +130,12 @@ keyBoard.onKeyUp = new Listener({
         console.log('right up is down')
         screen[FocusAction.RIGHT]()
     },
-    [KeyBoardCode.Enter]:()=>{
+    [KeyBoardCode.Enter]: () => {
         console.log('enter up is down')
         screen[FocusAction.ENTER]()
+    },
+    [KeyBoardCode.Start]: () => {
+        console.log('Start up is down')
+        screen[FocusAction.START]()
     }
 })

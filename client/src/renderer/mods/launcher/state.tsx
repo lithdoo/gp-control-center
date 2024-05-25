@@ -3,7 +3,7 @@ import { AppGridLayout, AppScreen, FocusAction, FocusItem, Focusable } from "@re
 import { GpApp } from "./app"
 import {prompt} from '@renderer/mods/prompt'
 import { PromptActionBtn } from "../prompt/state"
-import { NColor } from "@renderer/tools/base"
+import { NxColor } from "@renderer/tools/base"
 import { PromptWaitIcon } from "../prompt/render"
 import { TestApp, app } from "../app"
 

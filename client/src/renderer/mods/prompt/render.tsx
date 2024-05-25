@@ -2,8 +2,8 @@ import { block, element, style } from "@renderer/tools/style"
 import { PromptScreen } from "./state"
 import { useWatch } from "@renderer/tools/state"
 import * as prompt from './index'
-import { NText } from "@renderer/tools/base"
 import { useEffect, useRef, useState } from "react"
+import { UxIcon, UxText } from "@renderer/components/base"
 
 
 const $prompt_modal = block('prompt_modal')
@@ -22,18 +22,6 @@ const $prompt_modal = block('prompt_modal')
     .build()
 
 
-export const UText = ({ text }: { text: NText }) => {
-    return (typeof text === 'string'
-        ? <p>{text}</p>
-        : <p ref={ref => { if (ref) ref.innerHTML = text.html }}></p>
-    )
-}
-
-export const UIcon = ({ name }: { name: string }) => {
-    return <svg className="icon" aria-hidden="true">
-        <use xlinkHref={'#gp-' + name}></use>
-    </svg>
-}
 
 export const PromptView = () => {
     const list = useWatch(prompt.prompt, (global) => [...global.list])
@@ -54,11 +42,11 @@ export const PromptModal = ({ screen, active }: { screen: PromptScreen, active: 
             {target.icon ?? ''}
         </div>
         <div className={$prompt_modal.content.$}>
-            <UText text={target.content}></UText>
+            <UxText text={target.content}></UxText>
         </div>
         <div className={$prompt_modal.detail.$}>{
             target.detail
-                ? <UText text={target.detail}></UText>
+                ? <UxText text={target.detail}></UxText>
                 : ''
         }
         </div>
@@ -78,8 +66,8 @@ export const PromptModal = ({ screen, active }: { screen: PromptScreen, active: 
                     ref.style.setProperty('--action-btn-color-text', action.color.text())
                 }}
             >
-                <div className={$prompt_modal.action_btn_icon.$}><UIcon name={action.icon}></UIcon></div>
-                <div className={$prompt_modal.action_btn_text.$}><UText text={action.text}></UText></div>
+                <div className={$prompt_modal.action_btn_icon.$}><UxIcon name={action.icon}></UxIcon></div>
+                <div className={$prompt_modal.action_btn_text.$}><UxText text={action.text}></UxText></div>
             </li>)
         }</ul>
     </div>

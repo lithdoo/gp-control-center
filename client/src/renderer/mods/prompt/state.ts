@@ -1,16 +1,16 @@
-import { NColor, NText } from "@renderer/tools/base";
+import { NxColor, NxText } from "@renderer/tools/base";
 import { AppScreen, FocusAction, FocusItem, Focusable } from "@renderer/tools/foucs";
 
 export type ActionResult = void | {
     success: boolean
-    message: NText
+    message: NxText
 }
 
 export class PromptScreen extends AppScreen {
     icon?: JSX.Element
 
-    content: NText = ''
-    detail?: NText = ''
+    content: NxText = ''
+    detail?: NxText = ''
 
     current: null | PromptActionBtn = null
     actions: PromptActionBtn[] = []
@@ -23,8 +23,8 @@ export class PromptScreen extends AppScreen {
 
     constructor(option: {
         icon?: JSX.Element
-        content: NText
-        detail?: NText
+        content: NxText
+        detail?: NxText
         current?: null | PromptActionBtn
         actions?: PromptActionBtn[]
     }) {
@@ -77,14 +77,14 @@ export class PromptScreen extends AppScreen {
 }
 
 export class PromptActionBtn extends FocusItem {
-    text: NText
+    text: NxText
     icon: string
-    color: NColor
+    color: NxColor
     handle: (option: { close: () => void }) => Promise<ActionResult>
     constructor(
-        text: NText, handle: (option: { close: () => void })=> Promise<ActionResult>, {
-            icon = 'back', color = NColor.gray
-        }: { icon?: string, color?: NColor } = {}) {
+        text: NxText, handle: (option: { close: () => void })=> Promise<ActionResult>, {
+            icon = 'back', color = NxColor.gray
+        }: { icon?: string, color?: NxColor } = {}) {
         super()
         this.text = text
         this.handle = handle
