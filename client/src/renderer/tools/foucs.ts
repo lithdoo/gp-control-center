@@ -14,7 +14,7 @@ export interface WithRefKey {
 }
 
 export interface Focusable extends WithRefKey {
-  target: HTMLElement | null
+  // target: HTMLElement | null
 
   [FocusAction.BACK]: () => Focusable | null
   [FocusAction.ENTER]: () => Focusable | null
@@ -41,23 +41,6 @@ export class FocusItem implements Focusable {
   [FocusAction.START]: () => Focusable | null = () => null;
 
   $key: string = Math.random().toString()
-  target: HTMLElement | null = null
-
-  private className: string = ''
-
-  bind(target: HTMLElement | null, className: string) {
-    this.target = target
-    this.className = className
-  }
-
-  onfocus() {
-    if (!this.className) return
-    this.target?.classList.add(this.className)
-  }
-  onblur() {
-    if (!this.className) return
-    this.target?.classList.remove(this.className)
-  }
 }
 
 export abstract class AppScreen implements WithRefKey {
@@ -112,8 +95,10 @@ export abstract class AppScreen implements WithRefKey {
     }
   }
   [FocusAction.ENTER]() {
+    console.log('start')
     if (this.getCurrent()) {
       const current = this.getCurrent()?.[FocusAction.ENTER]()
+      console.log('start',this.getCurrent())
       if (current) this.focus(current)
     } else {
       this.focus(this.default())

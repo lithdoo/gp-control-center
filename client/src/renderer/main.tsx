@@ -9,7 +9,7 @@ import {Launcher} from './mods/launcher/render'
 import { ws } from './ws'
 import { PromptView } from './mods/prompt/render'
 import { AppView } from './mods/app/render'
-
+import '@renderer/apps'
 
 ws.start().then((({clientId})=>{
   ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

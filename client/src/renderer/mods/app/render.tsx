@@ -1,8 +1,7 @@
 import { useWatch } from "@renderer/tools/state"
 import { block, element, style } from "@renderer/tools/style"
-import { app } from "."
+import { app, AppHoldingScreen } from "."
 import { UxBtnGroup } from "@renderer/components/base"
-import { AppHoldingScreen } from "./state"
 
 
 const $app_view = block('app-view')
@@ -25,9 +24,6 @@ export const AppView = () => {
             {current.view}
         </div>
 
-    console.log('actions', holding)
-
-
     return <div className={[
         $app_view.$,
         current ? '' : $app_view._.hidden.$,
@@ -40,7 +36,7 @@ export const AppView = () => {
 
 export const AppHoldBtnGroup = ({ screen }: { screen: AppHoldingScreen }) => {
     const actions = useWatch(screen, (screen) => [...(screen?.actions ?? [])])
-    const activeKey = useWatch(screen,(screen) => screen.getCurrent()?.$key || '')
+    const activeKey = useWatch(screen, (screen) => screen.getCurrent()?.$key || '')
     return <UxBtnGroup list={actions} activeKey={activeKey}></UxBtnGroup>
 }
 

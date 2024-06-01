@@ -1,8 +1,6 @@
 import { block, element, style } from "@renderer/tools/style"
-import { message, apps, settings, mainScreen } from "./state"
-import { AppScreen, FocusItem } from "@renderer/tools/foucs"
+import { mainScreen } from "./state"
 import { useWatch } from "@renderer/tools/state"
-import { GpApp } from "./app"
 
 const $main_app = block('main_app')
   .load(element('client_id'))
@@ -25,43 +23,58 @@ export const Launcher = ({ clientId }: { clientId: string }) => {
   return <div className={$main_app.$}>
     <div className={$main_app.client_id.$}>{clientId}</div>
     <div className={$main_app.header.$}>
-      <Message message={message}></Message>
+      <Message></Message>
     </div>
     <div className={$main_app.body.$}>
-      <AppList apps={apps} screen={mainScreen}></AppList>
-      <SettingList settings={settings}></SettingList>
+      <AppList></AppList>
+      <SettingList></SettingList>
     </div>
     <div className={$main_app.footer.$}></div>
   </div>
 }
 
-const Message = ({ message }: { message: FocusItem }) => {
-  return <div className={$main_app.header_avator.$} ref={node => message.bind(node, $main_app.header_avator.active.$)}></div>
+const Message = () => {
+  const focusId = useWatch(mainScreen, screen => screen.getCurrent()?.$key)
+  const msg = useWatch(mainScreen, screen => screen.message())
+  return <div className={[
+    $main_app.header_avator.$,
+    focusId === msg.$key ? $main_app.header_avator.active.$ : ''
+  ].join(' ')}></div>
 }
 
 
-const AppList = ({ apps, screen }: { apps: GpApp[], screen: AppScreen }) => {
-  const focusId = useWatch(screen, screen => screen.getCurrent()?.$key)
+const AppList = () => {
+  const focusId = useWatch(mainScreen, screen => screen.getCurrent()?.$key)
+  const list = useWatch(mainScreen, screen => screen.applications())
 
   return <ul className={$main_app.body_app_list.$}>{
-    apps.map((app) =>
+    list.map((app) =>
       <li
         key={app.$key}
-        className={`${$main_app.body_app_item.$} ${focusId === app.$key ? $main_app.body_app_item.active.$ : ''}`}
-        ref={node => app.bind(node, '')}>
+        className={[
+          $main_app.body_app_item.$,
+          focusId === app.$key ? $main_app.body_app_item.active.$ : ''
+        ].join(' ')}
+        ref={node => app.bind(node)}>
+          <div style={{height:'100%',width:'100%',backgroundImage:`url(${app.app.icon})`}}></div>
       </li>
     )
   }</ul>
 }
 
-const SettingList = ({ settings }: { settings: FocusItem[] }) => {
+const SettingList = () => {
+  
+  const focusId = useWatch(mainScreen, screen => screen.getCurrent()?.$key)
+  const settingList = useWatch(mainScreen, screen => screen.settings())
 
   return <ul className={$main_app.body_setting_list.$}>{
-    settings.map((setting) =>
+    settingList.map((setting) =>
       <li
         key={setting.$key}
-        className={$main_app.body_setting_item.$}
-        ref={node => setting.bind(node, $main_app.body_setting_item.active.$)}>
+        className={[
+          $main_app.body_setting_item.$,
+          focusId === setting.$key?$main_app.body_setting_item.active.$:''
+        ].join(' ')}>
       </li>
     )
   }</ul>
@@ -132,6 +145,7 @@ style()
     flexShrink: '0',
     margin: "0 6px",
     marginBottom: '12px',
+    padding:'24px',
     transition: 'all 0.3s ease-out'
   })
   .load([$main_app.body_app_item.active.$], {
